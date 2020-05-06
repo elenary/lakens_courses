@@ -1,11 +1,12 @@
 n<-200 #total number of datapoints (per condition) you are willing to collect after initial 10
 
-D<-0.0 #True effect size (Keep SD below to 1, otherwise, this is just mean dif, not d)
+D<-0.8#True effect size (Keep SD below to 1, otherwise, this is just mean dif, not d)
 SD<-1 #Set True standard deviation.
 
 p<-numeric(n) #store p-values
 x<-numeric(n) #store x-values
 y<-numeric(n) #store y-values
+g <- 0
 
 n<-n+10 #script calculates p-values after 10 people in each condition, so add 10 to number of datapoints
 
@@ -14,9 +15,13 @@ for(i in 10:n){ #for each simulated participants after the first 10
   y[i]<-rnorm(n = 1, mean = D, sd = SD)
   z<-t.test(x[1:i],y[1:i], var.equal=TRUE) #perform the t-test
   p[i]<-z$p.value 
+  ifelse(p[i]<0.05, g <- g+1, g)
 }
 
 p<-p[10:n] #Remove forst 10 empty p-values
+g
+
+
 
 #Create the plot
 #png(file="p-value_over_time.png",width=4000,height=2000, , units = "px", res = 500)
